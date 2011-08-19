@@ -24,23 +24,27 @@ namespace Liquid.Commands
             Player player = server.GetPlayerByName(sender.Name);
             if (args.TryGetString(0, out waterlava))
             {
-                if (waterlava.ToUpper() == "WATER" || waterlava.ToUpper() == "LAVA" || waterlava.ToUpper() == "OFF")
+                switch (waterlava.ToUpper())
                 {
-                    player.PluginData["water"] = false;
-                    player.PluginData["lava"] = false;
-                    player.PluginData[waterlava.ToLower()] = true;
-                    if (waterlava.ToUpper() == "WATER" || waterlava.ToUpper() == "LAVA")
-                    {
-                        player.sendMessage("You are now spawning " + waterlava.ToLower());
-                    }
-                    else
-                    {
-                        player.sendMessage("You are no longer spawning water or lava");
-                    }
-                }
-                else
-                {
-                    throw new CommandError("Parameter must be WATER, LAVA or OFF");
+                    case "WATER":
+                    case "LAVA":
+                    case "OFF":
+                        player.PluginData["water"] = false;
+                        player.PluginData["lava"] = false;
+                        player.PluginData[waterlava.ToLower()] = true;
+                        switch (waterlava.ToUpper())
+                        {
+                            case "WATER":
+                            case "LAVA":
+                                player.sendMessage("You are now spawning " + waterlava.ToLower());    
+                                break;
+                            default:
+                                player.sendMessage("You are no longer spawning water or lava");
+                                break;
+                        }
+                        break;
+                    default:
+                        throw new CommandError("Parameter must be WATER, LAVA or OFF");
                 }
             }
             else
