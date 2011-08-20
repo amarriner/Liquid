@@ -16,13 +16,13 @@ namespace Liquid
     public struct LiquidTile
     {
         public int x, y;
-        public TileRef tile;
+        public TileRef tileRef;
 
         public LiquidTile(int xIn, int yIn, TileRef tileIn)
         {
             x = xIn;
             y = yIn;
-            tile = tileIn;
+            tileRef = tileIn;
         }
 
         public LiquidTile(LiquidTile tileIn)
@@ -40,7 +40,7 @@ namespace Liquid
             Name = "Liquid";
             Description = "A plugin to manipulate liquids";
             Author = "amarriner";
-            Version = "0.1";
+            Version = "0.2";
             TDSMBuild = 31;
 
             plugin = this;
@@ -50,7 +50,6 @@ namespace Liquid
         {
             Program.tConsole.WriteLine(base.Name + " enabled.");
             this.registerHook(Hooks.PLAYER_TILECHANGE);
-            this.registerHook(Hooks.PLAYER_STATEUPDATE);
 
             AddCommand("liquid")
                 .WithAccessLevel(AccessLevel.OP)
@@ -66,7 +65,11 @@ namespace Liquid
 
         public override void onPlayerTileChange(PlayerTileChangeEvent Event)
         {
-            if (Server.GetPlayerByName(Event.Sender.Name).isInOpList())
+            Player player = Server.GetPlayerByName(Event.Sender.Name);
+            bool water = player.PluginData.ContainsKey("water") ? (bool)player.PluginData["water"] : false;
+            bool lava = player.PluginData.ContainsKey("lava") ? (bool)player.PluginData["lava"] : false;
+
+            if (player.isInOpList() && (water || lava))
             {
                 LiquidTile liquidTile = new LiquidTile(
                     (int)Event.Position.X,
@@ -74,28 +77,24 @@ namespace Liquid
                     Server.tile.At((int)Event.Position.X, (int)Event.Position.Y));
       
                 FillLiquid(liquidTile,
-                    (bool)Server.GetPlayerByName(Event.Sender.Name).PluginData["water"],
-                    (bool)Server.GetPlayerByName(Event.Sender.Name).PluginData["lava"],
-                    2);
+                    water,
+                    lava);
             }
 
             base.onPlayerTileChange(Event);
         }
 
-        private void FillLiquid(LiquidTile tile, bool water, bool lava, int depth)
+        private void FillLiquid(LiquidTile tile, bool water, bool lava)
         {
-            if (depth > 0)
+            if (water)
             {
-                if (water)
-                {
-                    tile.tile.SetLava(false);
-                    tile.tile.SetLiquid(255);
-                }
-                else if (lava)
-                {
-                    tile.tile.SetLava(true);
-                    tile.tile.SetLiquid(255);
-                }
+                tile.tileRef.SetLava(false);
+                tile.tileRef.SetLiquid(255);
+            }
+            else if (lava)
+            {
+                tile.tileRef.SetLava(true);
+                tile.tileRef.SetLiquid(255);
             }
         }
 

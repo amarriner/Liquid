@@ -28,20 +28,15 @@ namespace Liquid.Commands
                 {
                     case "WATER":
                     case "LAVA":
-                    case "OFF":
                         player.PluginData["water"] = false;
                         player.PluginData["lava"] = false;
                         player.PluginData[waterlava.ToLower()] = true;
-                        switch (waterlava.ToUpper())
-                        {
-                            case "WATER":
-                            case "LAVA":
-                                player.sendMessage("You are now spawning " + waterlava.ToLower());    
-                                break;
-                            default:
-                                player.sendMessage("You are no longer spawning water or lava");
-                                break;
-                        }
+                        player.sendMessage("You are now spawning " + waterlava.ToLower(), new Color(100, 250, 100));
+                        break;
+                    case "OFF":
+                        player.PluginData["water"] = false;
+                        player.PluginData["lava"] = false;
+                        player.sendMessage("You are no longer spawning water or lava", new Color(100, 250, 100));
                         break;
                     default:
                         throw new CommandError("Parameter must be WATER, LAVA or OFF");
@@ -51,7 +46,7 @@ namespace Liquid.Commands
             {
                 player.PluginData["water"] = false;
                 player.PluginData["lava"] = false;
-                player.sendMessage("You are no longer spawning water or lava");
+                player.sendMessage("You are no longer spawning water or lava", new Color(100, 250, 100));
             }
         }
     }
