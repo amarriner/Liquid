@@ -40,8 +40,8 @@ namespace Liquid
             Name = "Liquid";
             Description = "A plugin to manipulate liquids";
             Author = "amarriner";
-            Version = "0.2";
-            TDSMBuild = 31;
+            Version = "0.2.1";
+            TDSMBuild = 32;
 
             plugin = this;
         }
