@@ -26,6 +26,10 @@ http://awbw.amarriner.com/terraria/Liquid.zip
 
 ##CHANGELOG
 
+**0.2.2**
+
+* Updated for TDSM Build 33
+
 **0.2.1**
 
 * Updated for TDSM Build 32
